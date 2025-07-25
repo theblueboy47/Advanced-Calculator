@@ -67,7 +67,7 @@ String? _getPow(String formula) {
     double a, b;
     int firstNumIndex, lastNumIndex;
     
-    (a, b, firstNumIndex, lastNumIndex) = getOperands(firstOpIndex, formula);
+    (a, b, firstNumIndex, lastNumIndex) = _getOperands(firstOpIndex, formula);
 
     result = pow(a, b) as double?;
 
@@ -95,7 +95,7 @@ String? _getMultiDiv(String formula) {
     double a, b;
     int firstNumIndex, lastNumIndex;
 
-    (a, b, firstNumIndex, lastNumIndex) = getOperands(firstOpIndex, formula);
+    (a, b, firstNumIndex, lastNumIndex) = _getOperands(firstOpIndex, formula);
 
     result = (firstOpIndex == indexOfMult) ? a * b : a / b;
 
@@ -127,7 +127,7 @@ String? _getAddSub(String formula) {
   if (firstOpIndex != -1) {
     double a, b;
     int firstNumIndex, lastNumIndex;
-    (a, b, firstNumIndex, lastNumIndex) = getOperands(firstOpIndex, formula);
+    (a, b, firstNumIndex, lastNumIndex) = _getOperands(firstOpIndex, formula);
 
     result = (firstOpIndex == indexOfAdd) ? a + b : a - b;
 
@@ -166,7 +166,7 @@ String _simplifyOps(String formula) {
   return formula;
 }
 
-(double, double, int, int) getOperands(int firstOpIndex, String formula) {
+(double, double, int, int) _getOperands(int firstOpIndex, String formula) {
   int firstNumIndex = firstOpIndex;
   int lastNumIndex = firstOpIndex + 1;
 
