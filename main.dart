@@ -64,26 +64,12 @@ String? _getPow(String formula) {
 
   int firstOpIndex = formula.indexOf("^");
   if (firstOpIndex != -1) {
-    int firstNumIndex = firstOpIndex;
-    int lastNumIndex = firstOpIndex + 1;
+    double a, b;
+    int firstNumIndex, lastNumIndex;
+    
+    (a, b, firstNumIndex, lastNumIndex) = getOperands(firstOpIndex, formula);
 
-    //finding the first operand
-    while (firstNumIndex - 1 >= 0 &&
-        (int.tryParse(formula[firstNumIndex - 1]) != null ||
-            formula[firstNumIndex - 1] == ".")) {
-      firstNumIndex--;
-    }
-    double a = double.parse(formula.substring(firstNumIndex, firstOpIndex));
-
-    //finding the second operand
-    while (lastNumIndex + 1 <= formula.length &&
-        (int.tryParse(formula[lastNumIndex]) != null ||
-            formula[lastNumIndex] == ".")) {
-      lastNumIndex++;
-    }
-    double b = double.parse(formula.substring(firstOpIndex + 1, lastNumIndex));
-
-    result =pow(a,b) as double?;
+    result = pow(a, b) as double?;
 
     formula = formula.replaceAll(
       formula.substring(firstNumIndex, lastNumIndex),
@@ -106,24 +92,10 @@ String? _getMultiDiv(String formula) {
   int maxIndex = max(indexOfMult, indexOfDiv);
   int firstOpIndex = (minIndex != -1) ? minIndex : maxIndex;
   if (firstOpIndex != -1) {
-    int firstNumIndex = firstOpIndex;
-    int lastNumIndex = firstOpIndex + 1;
+    double a, b;
+    int firstNumIndex, lastNumIndex;
 
-    //finding the first operand
-    while (firstNumIndex - 1 >= 0 &&
-        (int.tryParse(formula[firstNumIndex - 1]) != null ||
-            formula[firstNumIndex - 1] == ".")) {
-      firstNumIndex--;
-    }
-    double a = double.parse(formula.substring(firstNumIndex, firstOpIndex));
-
-    //finding the second operand
-    while (lastNumIndex + 1 <= formula.length &&
-        (int.tryParse(formula[lastNumIndex]) != null ||
-            formula[lastNumIndex] == ".")) {
-      lastNumIndex++;
-    }
-    double b = double.parse(formula.substring(firstOpIndex + 1, lastNumIndex));
+    (a, b, firstNumIndex, lastNumIndex) = getOperands(firstOpIndex, formula);
 
     result = (firstOpIndex == indexOfMult) ? a * b : a / b;
 
@@ -153,24 +125,9 @@ String? _getAddSub(String formula) {
   int maxIndex = max(indexOfAdd, indexOfSub);
   int firstOpIndex = (minIndex != -1) ? minIndex : maxIndex;
   if (firstOpIndex != -1) {
-    int firstNumIndex = firstOpIndex;
-    int lastNumIndex = firstOpIndex + 1;
-
-    //finding the first operand
-    while (firstNumIndex - 1 >= 0 &&
-        (int.tryParse(formula[firstNumIndex - 1]) != null ||
-            formula[firstNumIndex - 1] == ".")) {
-      firstNumIndex--;
-    }
-    double a = double.parse(formula.substring(firstNumIndex, firstOpIndex));
-
-    //finding the second operand
-    while (lastNumIndex + 1 <= formula.length &&
-        (int.tryParse(formula[lastNumIndex]) != null ||
-            formula[lastNumIndex] == ".")) {
-      lastNumIndex++;
-    }
-    double b = double.parse(formula.substring(firstOpIndex + 1, lastNumIndex));
+    double a, b;
+    int firstNumIndex, lastNumIndex;
+    (a, b, firstNumIndex, lastNumIndex) = getOperands(firstOpIndex, formula);
 
     result = (firstOpIndex == indexOfAdd) ? a + b : a - b;
 
@@ -207,6 +164,29 @@ String _simplifyOps(String formula) {
     temp = temp.substring(1);
   formula = temp;
   return formula;
+}
+
+(double, double, int, int) getOperands(int firstOpIndex, String formula) {
+  int firstNumIndex = firstOpIndex;
+  int lastNumIndex = firstOpIndex + 1;
+
+  //finding the first operand
+  while (firstNumIndex - 1 >= 0 &&
+      (int.tryParse(formula[firstNumIndex - 1]) != null ||
+          formula[firstNumIndex - 1] == ".")) {
+    firstNumIndex--;
+  }
+  double a = double.parse(formula.substring(firstNumIndex, firstOpIndex));
+
+  //finding the second operand
+  while (lastNumIndex + 1 <= formula.length &&
+      (int.tryParse(formula[lastNumIndex]) != null ||
+          formula[lastNumIndex] == ".")) {
+    lastNumIndex++;
+  }
+  double b = double.parse(formula.substring(firstOpIndex + 1, lastNumIndex));
+
+  return (a, b, firstNumIndex, lastNumIndex);
 }
 
 bool check(String s) {
